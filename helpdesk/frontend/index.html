@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>HelpDesk</title>
+
+<script>
+
+const usuarioLogado = localStorage.getItem("usuario")
+
+if(!usuarioLogado){
+    window.location.href = "login.html"
+}
+
+</script>
+</head>
+
+<body>
+
+<div class="topbar">
+
+<div>HelpDeskPRO</div>
+
+<span id="usuarioLogado"></span>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+</div>
+
+<div class="board">
+
+    <div class="coluna">
+        <h3>Em aberto <span id="count-aberto">0</span></h3>
+        <div id="aberto"></div>
+    </div>
+
+    <div class="coluna">
+        <h3>Em andamento <span id="count-andamento">0</span></h3>
+        <div id="andamento"></div>
+    </div>
+
+    <div class="coluna">
+        <h3>Concluído <span id="count-concluido">0</span></h3>
+        <div id="concluido"></div>
+    </div>
+
+</div>
+
+<!-- BOTÃO FLUTUANTE -->
+
+<button class="fab" onclick="abrirPopup()">+</button>
+
+
+<!-- POPUP -->
+
+<div id="popupChamado" class="popup">
+
+<div class="popup-content">
+
+<h3>Novo Chamado</h3>
+
+<input id="titulo" placeholder="Título">
+
+<textarea id="descricao" placeholder="Descrição"></textarea>
+
+<select id="prioridade">
+<option>Baixa</option>
+<option>Média</option>
+<option>Alta</option>
+</select>
+
+<button onclick="criarChamado()">Criar</button>
+
+<button onclick="fecharPopup()">Cancelar</button>
+
+</div>
+
+</div>
+
+<!-- POPUP CHAMADOS -->
+
+<div id="popupDetalhes" class="popup">
+
+<div class="popup-content">
+
+<h3 id="detId"></h3>
+
+<h3 id="detTitulo"></h3>
+
+<p id="detDescricao"></p>
+
+<p id="detPrioridade"></p>
+
+<p id="detStatus"></p>
+
+<button onclick="fecharDetalhes()">Fechar</button>
+
+</div>
+
+</div>
+
+<script src="js/chamados.js"></script>
+
+</body>
+
+</html>

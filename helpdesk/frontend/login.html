@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Login - HelpDesk</title>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Login</h2>
+
+<input id="username" placeholder="Usuário" required>
+
+<input id="senha" type="password" placeholder="Senha" required minlength="4">
+
+<button onclick="login()">Entrar</button>
+
+<p>
+Não tem conta?
+<a href="registro.html">Criar conta</a>
+</p>
+
+<p id="mensagem"></p>
+
+</div>
+
+<script src="js/login.js"></script>
+
+</body>
+
+</html>

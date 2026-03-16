@@ -1,0 +1,15 @@
+# dependências
+node_modules/
+
+# ssenha do banco
+.env
+
+# logs
+npm-debug.log*
+
+# arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# vscode opcional
+.vscode/
