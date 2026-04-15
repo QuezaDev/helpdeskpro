@@ -17,7 +17,11 @@ const config = {
     password: process.env.DB_PASSWORD,
     server: process.env.DB_SERVER,
     database: process.env.DB_DATABASE,
-    port: process.env.DB_PORT
+    port: parseInt(process.env.DB_PORT),
+    options: {
+        encrypt: false,
+        trustServerCertificate: true
+    }
 }
 
 // Conexão com SQL Server
@@ -40,9 +44,9 @@ app.post("/chamados", async (req, res) => {
         const pool = await sql.connect(config)
 
         const result = await pool.request()
-            .input("titulo", titulo)
-            .input("descricao", descricao)
-            .input("prioridade", prioridade)
+            .input("titulo", sql.VarChar, titulo)
+            .input("descricao", sql.VarChar, descricao)
+            .input("prioridade", sql.VarChar, prioridade)
             .query(`
                 INSERT INTO Chamados (titulo, descricao, prioridade, status)
                 OUTPUT INSERTED.id
@@ -55,10 +59,41 @@ app.post("/chamados", async (req, res) => {
         res.json({ codigo })
 
     } 
-        catch (err) {
+    catch (err) {
 
         console.log(err)
         res.status(500).json({ erro: "Erro ao criar chamado" })
+
+    }
+
+})
+
+
+// Alterar Descrição
+app.put("/chamados/:id", async (req, res) => {
+
+    const { id } = req.params
+    const { descricao } = req.body
+
+    try{
+
+        const pool = await sql.connect(config)
+
+        await pool.request()
+            .input("id", sql.Int, id)
+            .input("descricao", sql.VarChar, descricao)
+            .query(`
+                UPDATE Chamados
+                SET descricao = @descricao
+                WHERE id = @id
+            `)
+
+        res.json({ success: true })
+
+    }catch(err){
+
+        console.log(err)
+        res.status(500).json({ success:false })
 
     }
 
@@ -86,6 +121,36 @@ app.get("/chamados", async (req, res) => {
 
 })
 
+
+// Alterar Status
+app.put("/chamados/:id/status", async (req, res) => {
+
+    const { id } = req.params
+    const { status } = req.body
+
+    try{
+
+        const pool = await sql.connect(config)
+
+        await pool.request()
+            .input("id", sql.Int, id)
+            .input("status", sql.VarChar, status)
+            .query(`
+                UPDATE Chamados
+                SET status = @status
+                WHERE id = @id
+            `)
+
+        res.json({ success: true })
+
+    }catch(err){
+
+        console.log(err)
+        res.status(500).json({ success:false })
+
+    }
+
+})
 
 // ============================
 // ROTA DE LOGIN
