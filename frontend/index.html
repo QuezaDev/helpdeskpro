@@ -80,22 +80,57 @@ if(!usuarioLogado){
 <!-- POPUP DETALHES -->
 <div id="popupDetalhes" class="popup">
 
-    <div class="popup-content">
+    <div class="popup-detalhes">
 
-        <h3 id="detId"></h3>
-        <h3 id="detTitulo"></h3>
+        <!-- COLUNA ESQUERDA -->
+        <div class="detalhes-info">
 
-        <textarea id="detDescricao" disabled></textarea>
+            <h3 id="detId"></h3>
+            <h2 id="detTitulo"></h2>
 
-        <button id="btnEditar" onclick="habilitarEdicao()">Editar</button>
-        <button id="btnSalvar" onclick="salvarDescricao()" style="display:none;">Salvar</button>
+            <label>Descrição</label>
+            <textarea id="detDescricao" disabled></textarea>
 
-        <p id="detPrioridade"></p>
-        <p id="detStatus"></p>
+            <button id="btnEditar"
+                    onclick="habilitarEdicao()"
+                    style="display:none;">
+                Editar
+            </button>
 
-        <div id="acoesChamado"></div>
+            <button id="btnSalvar"
+                    onclick="salvarDescricao()"
+                    style="display:none;">
+                Salvar
+            </button>
 
-        <button onclick="fecharDetalhes()">Fechar</button>
+            <p id="detPrioridade"></p>
+            <p id="detStatus"></p>
+
+            <div id="acoesChamado"></div>
+
+            <button onclick="fecharDetalhes()">
+                Fechar
+            </button>
+
+        </div>
+
+        <!-- COLUNA DIREITA -->
+        <div class="detalhes-comentarios">
+
+            <h3>Comentários</h3>
+
+            <div id="listaComentarios"></div>
+
+            <textarea
+                id="novoComentario"
+                placeholder="Digite um comentário..."
+            ></textarea>
+
+            <button onclick="adicionarComentario()">
+                Adicionar Comentário
+            </button>
+
+        </div>
 
     </div>
 

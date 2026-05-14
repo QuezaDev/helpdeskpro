@@ -6,6 +6,10 @@ let chamadoAtual = null
 
 const usuario = JSON.parse(localStorage.getItem("usuario"))
 
+const podeGerenciar =
+    usuario &&
+    (usuario.tipo === "admin" || usuario.tipo === "tecnico");
+
 if (usuario && document.getElementById("usuarioLogado")) {
     document.getElementById("usuarioLogado").innerText =
         "Usuário: " + usuario.username
@@ -165,56 +169,76 @@ async function carregarChamados(){
 
 function abrirDetalhes(chamado){
 
-    chamadoAtual = chamado
+    chamadoAtual = chamado;
 
-    document.getElementById("popupDetalhes").style.display = "flex"
+    document.getElementById("popupDetalhes").style.display = "flex";
+
+    carregarComentarios();
+
+    document.getElementById("novoComentario").value = "";
 
     document.getElementById("detId").innerText =
-        "TASK" + String(chamado.id).padStart(5,"0")
+        "TASK" + String(chamado.id).padStart(5, "0");
 
-    document.getElementById("detTitulo").innerText = chamado.titulo
-    document.getElementById("detDescricao").value = chamado.descricao
-    document.getElementById("detPrioridade").innerText = "Prioridade: " + chamado.prioridade
-    document.getElementById("detStatus").innerText = "Status: " + chamado.status
+    document.getElementById("detTitulo").innerText = chamado.titulo;
+    document.getElementById("detDescricao").value = chamado.descricao;
+    document.getElementById("detPrioridade").innerText =
+        "Prioridade: " + chamado.prioridade;
+    document.getElementById("detStatus").innerText =
+        "Status: " + chamado.status;
 
-    // ✅ CONTROLE DE EDIÇÃO
-    document.getElementById("detDescricao").disabled = true
-    document.getElementById("btnEditar").style.display = "block"
-    document.getElementById("btnSalvar").style.display = "none"
+    // Campo sempre inicia bloqueado
+    document.getElementById("detDescricao").disabled = true;
+    document.getElementById("btnSalvar").style.display = "none";
 
-    const acoes = document.getElementById("acoesChamado")
+    // Verifica o perfil do usuário
+    const tipoUsuario = usuario.tipo?.toLowerCase().trim();
 
-    acoes.innerHTML = ""
+    if (tipoUsuario === "admin" || tipoUsuario === "tecnico") {
+        document.getElementById("btnEditar").style.display = "block";
+    } else {
+        document.getElementById("btnEditar").style.display = "none";
+    }
 
-    if(chamado.status === "Aberto"){
+    // Área de ações
+    const acoes = document.getElementById("acoesChamado");
+    acoes.innerHTML = "";
+
+    // Usuário comum não pode alterar status
+    if (tipoUsuario !== "admin" && tipoUsuario !== "tecnico") {
+        return;
+    }
+
+    // Botões conforme status
+    if (chamado.status === "Aberto") {
         acoes.innerHTML += `
             <button onclick="alterarStatus('Em andamento')">
                 Iniciar atendimento
             </button>
-        `
+        `;
     }
 
-    if(chamado.status === "Em andamento"){
+    if (chamado.status === "Em andamento") {
         acoes.innerHTML += `
             <button onclick="alterarStatus('Concluído')">
                 Concluir chamado
             </button>
-        `
+        `;
+
         acoes.innerHTML += `
             <button onclick="alterarStatus('Aberto')">
                 Voltar para fila
             </button>
-        `
+        `;
     }
 
-    if(chamado.status === "Concluído"){
+    if (chamado.status === "Concluído") {
         acoes.innerHTML += `
             <button onclick="alterarStatus('Aberto')">
                 Reabrir chamado
             </button>
-        `
+        `;
     }
-
 }
 
 function habilitarEdicao(){
@@ -291,3 +315,78 @@ async function salvarDescricao(){
 // ============================
 
 carregarChamados()
+
+async function carregarComentarios() {
+
+    const response = await fetch(
+        `http://localhost:3000/comentarios/${chamadoAtual.id}`
+    );
+
+    const comentarios = await response.json();
+
+    const lista = document.getElementById("listaComentarios");
+    lista.innerHTML = "";
+
+    const tipoUsuarioLogado = usuario.tipo?.toLowerCase().trim();
+
+    comentarios.forEach(comentario => {
+
+        const dataFormatada = comentario.data_formatada;
+
+        const meuComentario = comentario.usuarioId == usuario.id;
+
+        const tipo = comentario.tipo?.toLowerCase() || "usuario";
+
+        lista.innerHTML += `
+            <div class="comentario ${meuComentario ? 'meu-comentario' : ''}">
+                
+                <div class="comentario-header">
+                    <div class="comentario-autor">
+                        <strong>${comentario.username}</strong>
+                        <span class="badge-role badge-${tipo}">
+                            ${comentario.tipo}
+                        </span>
+                    </div>
+
+                    <span class="comentario-data">
+                        ${dataFormatada}
+                    </span>
+                </div>
+
+                <div class="comentario-texto">
+                    ${comentario.comentario}
+                </div>
+            </div>
+        `;
+    });
+
+    lista.scrollTop = lista.scrollHeight;
+}
+
+async function adicionarComentario() {
+
+    const texto = document
+        .getElementById("novoComentario")
+        .value
+        .trim();
+
+    if (texto === "") {
+        return;
+    }
+
+    await fetch("http://localhost:3000/comentarios", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chamadoId: chamadoAtual.id,
+            usuarioId: usuario.id,
+            comentario: texto
+        })
+    });
+
+    document.getElementById("novoComentario").value = "";
+
+    await carregarComentarios();
+}
