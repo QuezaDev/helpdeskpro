@@ -1,88 +1,113 @@
-/* PALETA DE CORES
-#0A100D - verde/preto profundo
-#B9BAA3 - cinza oliva
-#D6D5C9 - fundo claro
-#A22C29 - vermelho destaque
-#902923 - vermelho escuro
-*/
+/* ============================
+   PALETA DE CORES
+============================ */
+:root{
+    --bg-dark: #0A100D;
+    --primary: #A22C29;
+    --primary-dark: #902923;
+    --text-light: #ffffff;
+}
 
-/* Reset */
+/* ============================
+   RESET GLOBAL
+============================ */
 body{
     font-family: Arial, Helvetica, sans-serif;
-    background-color:#D6D5C9;
     margin:0;
-    color:#0A100D;
+    color:var(--text-light);
 }
 
-/* LOGIN / FORM */
-.container{
+/* ============================
+   DASHBOARD (INDEX)
+============================ */
+.dashboard{
 
-    width:350px;
-    margin:120px auto;
+    min-height:100vh;
+
+    background:
+        radial-gradient(circle at 20% 20%, #902923, transparent 40%),
+        radial-gradient(circle at 80% 30%, #A22C29, transparent 40%),
+        radial-gradient(circle at 50% 80%, #0A100D, transparent 60%),
+        var(--bg-dark);
+
+}
+
+/* ============================
+   LOGIN
+============================ */
+.login-page{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+
+    background:
+        radial-gradient(circle at 20% 20%, #902923, transparent 40%),
+        radial-gradient(circle at 80% 30%, #A22C29, transparent 40%),
+        radial-gradient(circle at 50% 80%, #0A100D, transparent 60%),
+        var(--bg-dark);
+
+}
+
+.login-container{
+
+    margin:0 auto !important;
+
+    width:320px;
     padding:30px;
 
-    background:white;
+    background: rgba(255,255,255,0.08);
 
-    border-radius:14px;
+    backdrop-filter: blur(20px);
 
-    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    border-radius:20px;
 
-}
+    border: 1px solid rgba(255,255,255,0.2);
 
-/* títulos */
-h2{
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+
     text-align:center;
-    margin-bottom:20px;
+
 }
 
-/* inputs */
-input, textarea, select{
+.login-container input{
 
     width:100%;
     padding:10px;
 
-    border-radius:8px;
-    border:1px solid #B9BAA3;
+    border-radius:10px;
+
+    border: 1px solid rgba(255,255,255,0.3);
+
+    background: rgba(255,255,255,0.15);
+
+    color:white;
 
     margin-bottom:15px;
 
-    font-size:14px;
-
 }
 
-/*textarea*/
-
-textarea{
-    resize: vertical;
-    min-height:80px;
+.login-container input::placeholder{
+    color: rgba(255,255,255,0.7);
 }
 
-/* foco no input */
-input:focus,
-textarea:focus,
-select:focus{
-
-    outline:none;
-    border:1px solid #A22C29;
-    box-shadow:0 0 3px rgba(162,44,41,0.4);
-
-}
-
-/* BOTÕES */
-
+/* ============================
+   BOTÕES
+============================ */
 button{
 
     width:100%;
     padding:10px;
 
-    background-color:#A22C29;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
 
     border:none;
     color:white;
 
-    cursor:pointer;
+    border-radius:10px;
 
-    border-radius:8px;
+    cursor:pointer;
 
     font-weight:bold;
 
@@ -92,89 +117,135 @@ button{
 
 button:hover{
 
-    background-color:#902923;
-    transform:scale(1.02);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(162,44,41,0.6);
 
 }
 
-/* TOPBAR */
-
+/* ============================
+   TOPBAR
+============================ */
 .topbar{
 
     display:flex;
     justify-content:space-between;
     align-items:center;
 
-    background:#0A100D;
-    color:white;
-
     padding:15px 25px;
 
-    box-shadow:0 3px 8px rgba(0,0,0,0.2);
+    background: rgba(10,16,13,0.7);
+
+    backdrop-filter: blur(10px);
 
 }
 
-/* botão logout */
+/* ============================
+   CHAMADO
+============================ */
 
-.logout{
+#acoesChamado{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
 
-    width:auto;
-    padding:6px 12px;
+#acoesChamado button{
+    width:100%;
+    margin:0; /* 👈 evita conflitos */
+}
 
-    background:#A22C29;
+#detStatus{
+    margin-bottom:5px;
+}
 
-    border:none;
+/* ============================
+   BOARD
+============================ */
+.board{
 
-    color:white;
+    display:flex;
+    gap:20px;
+
+    padding:20px;
+
+}
+
+/* ============================
+   COLUNAS
+============================ */
+.coluna{
+
+    flex:1;
+
+    background: rgba(255,255,255,0.08);
+
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255,255,255,0.2);
+
+    border-radius:16px;
+
+    padding:15px;
+
+    min-height:350px;
+
+}
+
+/* ============================
+   TÍTULO COLUNA
+============================ */
+.coluna h3{
+
+    display:flex;
+    justify-content:space-between;
+
+}
+
+/* ============================
+   CONTADOR
+============================ */
+.coluna span{
+
+    background: rgba(255,255,255,0.2);
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+}
+
+/* ============================
+   CARDS
+============================ */
+.card{
+
+    background: rgba(255,255,255,0.15);
+
+    backdrop-filter: blur(10px);
+
+    padding:14px;
+
+    margin-bottom:12px;
+
+    border-radius:12px;
 
     cursor:pointer;
 
-    border-radius:6px;
+    transition:0.2s;
 
 }
 
-.logout:hover{
+.card:hover{
 
-    background:#902923;
-
-}
-
-/* BOTÃO FLUTUANTE */
-
-.fab{
-
-    position:fixed;
-
-    bottom:30px;
-    right:30px;
-
-    width:60px;
-    height:60px;
-
-    border-radius:50%;
-
-    background:#A22C29;
-
-    color:white;
-
-    font-size:30px;
-
-    border:none;
-
-    cursor:pointer;
-
-    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.4);
 
 }
 
-.fab:hover{
-
-    background:#902923;
-
-}
-
-/* POPUP */
-
+/* ============================
+   POPUP
+============================ */
 .popup{
 
     display:none;
@@ -187,127 +258,57 @@ button:hover{
     width:100%;
     height:100%;
 
-    background:rgba(0,0,0,0.4);
+    background:rgba(0,0,0,0.5);
 
-    align-items:center;
     justify-content:center;
+    align-items:center;
 
 }
 
 .popup-content{
 
-    background:white;
-
-    padding:25px;
-
-    border-radius:12px;
-
-    width:320px;
-
     display:flex;
     flex-direction:column;
-    gap:10px;
-    max-width:90%;
+    gap:10px; /* 👈 ESSENCIAL */
 
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    background: rgba(255,255,255,0.1);
 
-}
-
-/* BOARD */
-
-.board{
-
-    display:flex;
-    gap:20px;
-    margin:25px;
-
-}
-
-/* COLUNAS */
-
-.coluna{
-
-    flex:1;
-
-    background:#B9BAA3;
-
-    padding:15px;
-
-    border-radius:10px;
-
-    min-height:300px;
-
-}
-
-/* TITULO DAS COLUNAS */
-
-.coluna h3{
-
-    margin-top:0;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-}
-
-/* CONTADOR */
-
-h3 span{
-
-    background:#A22C29;
-    color:white;
-
-    padding:3px 10px;
+    backdrop-filter: blur(25px);
 
     border-radius:20px;
 
-    font-size:13px;
+    padding:25px;
+
+    width:340px;
 
 }
 
-/* CARDS */
+/* ============================
+   FLOAT BUTTON
+============================ */
+.fab{
 
-.card{
+    position:fixed;
+    bottom:30px;
+    right:30px;
 
-    background:white;
+    width:60px;
+    height:60px;
 
-    padding:12px;
+    border-radius:50%;
 
-    margin-bottom:10px;
+    background:var(--primary);
 
-    border-radius:8px;
-
-    cursor:pointer;
-
-    border-left:5px solid #A22C29;
-
-    box-shadow:0 3px 6px rgba(0,0,0,0.1);
-
-    transition:0.2s;
+    font-size:30px;
 
 }
 
-.card:hover{
+/* ============================
+   TEXTAREA
+============================ */
+textarea{
 
-    transform:translateY(-2px);
-
-    box-shadow:0 6px 12px rgba(0,0,0,0.15);
-
-}
-
-/* CHAMADOS */
-
-.chamado{
-
-    background:white;
-
-    padding:15px;
-
-    margin-bottom:10px;
-
-    border-radius:8px;
-
-    border-left:5px solid #A22C29;
+    resize:vertical;
+    min-height:80px;
 
 }

@@ -7,28 +7,30 @@
     <title>HelpDesk</title>
 
 <script>
-
 const usuarioLogado = localStorage.getItem("usuario")
 
 if(!usuarioLogado){
     window.location.href = "login.html"
 }
-
 </script>
+
 </head>
 
-<body>
+<body class="dashboard">
 
+<!-- TOPBAR -->
 <div class="topbar">
 
-<div>HelpDeskPRO</div>
+    <div><strong>HelpDeskPRO</strong></div>
 
-<span id="usuarioLogado"></span>
-
-<button class="logout" onclick="logout()">Logout</button>
+    <div>
+        <span id="usuarioLogado"></span>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
 
 </div>
 
+<!-- BOARD -->
 <div class="board">
 
     <div class="coluna">
@@ -49,60 +51,57 @@ if(!usuarioLogado){
 </div>
 
 <!-- BOTÃO FLUTUANTE -->
-
 <button class="fab" onclick="abrirPopup()">+</button>
 
-
-<!-- POPUP -->
-
+<!-- POPUP CRIAR CHAMADO -->
 <div id="popupChamado" class="popup">
 
-<div class="popup-content">
+    <div class="popup-content">
 
-<h3>Novo Chamado</h3>
+        <h3>Novo Chamado</h3>
 
-<input id="titulo" placeholder="Título">
+        <input id="titulo" placeholder="Título">
 
-<textarea id="descricao" placeholder="Descrição"></textarea>
+        <textarea id="descricao" placeholder="Descrição"></textarea>
 
-<select id="prioridade">
-<option>Baixa</option>
-<option>Média</option>
-<option>Alta</option>
-</select>
+        <select id="prioridade">
+            <option>Baixa</option>
+            <option>Média</option>
+            <option>Alta</option>
+        </select>
 
-<button onclick="criarChamado()">Criar</button>
+        <button onclick="criarChamado()">Criar</button>
+        <button onclick="fecharPopup()">Cancelar</button>
 
-<button onclick="fecharPopup()">Cancelar</button>
+    </div>
 
 </div>
 
-</div>
-
-<!-- POPUP CHAMADOS -->
-
+<!-- POPUP DETALHES -->
 <div id="popupDetalhes" class="popup">
 
-<div class="popup-content">
+    <div class="popup-content">
 
-<h3 id="detId"></h3>
+        <h3 id="detId"></h3>
+        <h3 id="detTitulo"></h3>
 
-<h3 id="detTitulo"></h3>
+        <textarea id="detDescricao" disabled></textarea>
 
-<p id="detDescricao"></p>
+        <button id="btnEditar" onclick="habilitarEdicao()">Editar</button>
+        <button id="btnSalvar" onclick="salvarDescricao()" style="display:none;">Salvar</button>
 
-<p id="detPrioridade"></p>
+        <p id="detPrioridade"></p>
+        <p id="detStatus"></p>
 
-<p id="detStatus"></p>
+        <div id="acoesChamado"></div>
 
-<button onclick="fecharDetalhes()">Fechar</button>
+        <button onclick="fecharDetalhes()">Fechar</button>
 
-</div>
+    </div>
 
 </div>
 
 <script src="js/chamados.js"></script>
 
 </body>
-
 </html>

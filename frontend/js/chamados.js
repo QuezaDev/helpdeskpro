@@ -1,3 +1,5 @@
+let chamadoAtual = null
+
 // ============================
 // USUÁRIO LOGADO
 // ============================
@@ -163,15 +165,64 @@ async function carregarChamados(){
 
 function abrirDetalhes(chamado){
 
+    chamadoAtual = chamado
+
     document.getElementById("popupDetalhes").style.display = "flex"
 
     document.getElementById("detId").innerText =
         "TASK" + String(chamado.id).padStart(5,"0")
 
     document.getElementById("detTitulo").innerText = chamado.titulo
-    document.getElementById("detDescricao").innerText = chamado.descricao
+    document.getElementById("detDescricao").value = chamado.descricao
     document.getElementById("detPrioridade").innerText = "Prioridade: " + chamado.prioridade
     document.getElementById("detStatus").innerText = "Status: " + chamado.status
+
+    // ✅ CONTROLE DE EDIÇÃO
+    document.getElementById("detDescricao").disabled = true
+    document.getElementById("btnEditar").style.display = "block"
+    document.getElementById("btnSalvar").style.display = "none"
+
+    const acoes = document.getElementById("acoesChamado")
+
+    acoes.innerHTML = ""
+
+    if(chamado.status === "Aberto"){
+        acoes.innerHTML += `
+            <button onclick="alterarStatus('Em andamento')">
+                Iniciar atendimento
+            </button>
+        `
+    }
+
+    if(chamado.status === "Em andamento"){
+        acoes.innerHTML += `
+            <button onclick="alterarStatus('Concluído')">
+                Concluir chamado
+            </button>
+        `
+        acoes.innerHTML += `
+            <button onclick="alterarStatus('Aberto')">
+                Voltar para fila
+            </button>
+        `
+    }
+
+    if(chamado.status === "Concluído"){
+        acoes.innerHTML += `
+            <button onclick="alterarStatus('Aberto')">
+                Reabrir chamado
+            </button>
+        `
+    }
+
+}
+
+function habilitarEdicao(){
+
+    document.getElementById("detDescricao").disabled = false
+
+    document.getElementById("btnEditar").style.display = "none"
+    document.getElementById("btnSalvar").style.display = "block"
 
 }
 
@@ -181,6 +232,59 @@ function fecharDetalhes() {
 
 }
 
+// ============================
+// ALTERAR CHAMADO
+// ============================
+
+async function alterarStatus(novoStatus){
+
+    await fetch(`http://localhost:3000/chamados/${chamadoAtual.id}/status`, {
+
+        method: "PUT",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+            status: novoStatus
+        })
+
+    })
+
+    fecharDetalhes()
+    carregarChamados()
+
+}
+
+async function salvarDescricao(){
+
+    const novaDescricao = document.getElementById("detDescricao").value
+
+    await fetch(`http://localhost:3000/chamados/${chamadoAtual.id}`,{
+
+        method:"PUT",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+            descricao: novaDescricao
+        })
+
+    })
+
+    alert("Descrição atualizada!")
+
+    document.getElementById("detDescricao").disabled = true
+    document.getElementById("btnEditar").style.display = "block"
+    document.getElementById("btnSalvar").style.display = "none"
+
+    fecharDetalhes()
+    carregarChamados()
+
+}
 
 // ============================
 // INICIALIZAÇÃO
