@@ -19,7 +19,7 @@ const config = {
     database: process.env.DB_DATABASE,
     port: parseInt(process.env.DB_PORT),
     options: {
-        encrypt: false,
+        encrypt: true,
         trustServerCertificate: true
     }
 }
@@ -151,6 +151,70 @@ app.put("/chamados/:id/status", async (req, res) => {
     }
 
 })
+
+// ============================
+// ROTAS DE COMENTÁRIOS
+// ============================
+
+// Listar comentários de um chamado
+app.get("/comentarios/:chamadoId", async (req, res) => {
+    const { chamadoId } = req.params;
+
+    try {
+        const pool = await sql.connect(config);
+
+        const result = await pool.request()
+            .input("chamadoId", chamadoId)
+            .query(`
+                SELECT
+                c.id,
+                    c.comentario,
+                    FORMAT(c.data_criacao, 'dd/MM/yyyy HH:mm') AS data_formatada,
+                    u.id AS usuarioId,
+                    u.username,
+                    u.tipo
+                FROM Comentarios c
+                INNER JOIN Usuarios u
+                    ON c.usuarioId = u.id
+                WHERE c.chamadoId = @chamadoId
+                ORDER BY c.data_criacao ASC
+            `);
+
+        res.json(result.recordset);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            erro: "Erro ao buscar comentários"
+        });
+    }
+});
+
+// Adicionar comentário
+app.post("/comentarios", async (req, res) => {
+    const { chamadoId, usuarioId, comentario } = req.body;
+
+    try {
+        const pool = await sql.connect(config);
+
+        await pool.request()
+            .input("chamadoId", chamadoId)
+            .input("usuarioId", usuarioId)
+            .input("comentario", comentario)
+            .query(`
+                INSERT INTO Comentarios
+                    (chamadoId, usuarioId, comentario)
+                VALUES
+                    (@chamadoId, @usuarioId, @comentario)
+            `);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false
+        });
+    }
+});
 
 // ============================
 // ROTA DE LOGIN
